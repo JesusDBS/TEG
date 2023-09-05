@@ -1,3 +1,39 @@
 {
-    "first_key": true
+    "first_key": true,
+    "FEATURE_EXTRACTION_CONFIGS": {
+        "stats": false,
+        "stats_features": [
+            "kurt",
+            "skew",
+            "crest_factor",
+            "peak2valley"
+        ],
+        "wave": true,
+        "wave_stats": true,
+        "wavelet_type": "db2",
+        "wavelet_lvl": 3,
+        "time_window": 120,
+        "variables_names": [
+            [
+                "PT_POSITION_POS58M",
+                "Pressure",
+                "PA"
+            ],
+            [
+                "GT_POSITION_POS58M",
+                "Total_mass_flow",
+                "KG/S"
+            ],
+            [
+                "PT_POSITION_POS1378M",
+                "Pressure",
+                "PA"
+            ],
+            [
+                "GT_POSITION_POS1378M",
+                "Total_mass_flow",
+                "KG/S"
+            ]
+        ]
+    }
 }

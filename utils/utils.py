@@ -1,5 +1,5 @@
 import json
-
+from typing import Any
 
 def parse_config(path: str = 'config.json') -> dict:
     """Parses config json to Python dict
@@ -16,3 +16,11 @@ def parse_config(path: str = 'config.json') -> dict:
     except:
 
         raise FileNotFoundError("Json file not found")
+    
+def convert_list2tuple(array: list=[]) -> tuple | Any:
+    """Converts a list into tuple
+    """
+    if not array:
+        return None
+    
+    return tuple(array)
