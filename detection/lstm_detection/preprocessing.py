@@ -5,7 +5,7 @@ from typing import Any
 # This code line is to avoid import relative error
 sys.path.append("..")
 
-from utils import parse_config, convert_list2tuple
+from utils import parse_config, convert_list2tuple, report_done
 from feature_extraction import FeatureExtraction
 
 class DetectionPreprocessPipeline:
@@ -14,6 +14,7 @@ class DetectionPreprocessPipeline:
     def __init__(self, configs: str) -> None:
         self.configs = parse_config(configs)
 
+    @report_done
     def _load_data(self):
         pass
     
@@ -22,4 +23,3 @@ class DetectionPreprocessPipeline:
 
     def __call__(self) -> Any:
         self.run()
-
