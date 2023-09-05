@@ -1,8 +1,9 @@
 import os
 import sys
+from typing import Any
 
 # This code line is to avoid import relative error
-sys.path.append("...")
+sys.path.append("..")
 
 from utils import parse_config, convert_list2tuple
 from feature_extraction import FeatureExtraction
@@ -13,4 +14,12 @@ class DetectionPreprocessPipeline:
     def __init__(self, configs: str) -> None:
         self.configs = parse_config(configs)
 
+    def _load_data(self):
+        pass
+    
+    def run(self):
+        self._load_data()
+
+    def __call__(self) -> Any:
+        self.run()
 
