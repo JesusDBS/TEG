@@ -1,9 +1,13 @@
 {
-    "DATA_PATH": [
-        "data",
-        "data_fuga",
-        "CF_EE_D0_R0.pkl"
-    ],
+    "DATA_PATH": {
+        "path": [
+            "..",
+            "data",
+            "data",
+            "Fuga"
+        ],
+        "filename":  "CF_EE_D0_R0.pkl"
+        },
     "INPUTS_VARIABLES": [
         [
             "PT_POSITION_POS58M",
