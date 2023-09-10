@@ -143,6 +143,7 @@ class DetectionPreprocessPipeline:
                     np.concatenate(
                         self.__extract_features(window), axis=1)
                 )
+                del window
 
                 if leak_flow_values_ratio >= self.configs['LEAK_RATIO']:
                     self.output_label.append(True)
