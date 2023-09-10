@@ -1,12 +1,13 @@
 {
+    "DEBUG": true,
     "DATA_PATH": {
         "path": [
             "..",
             "data",
             "data",
-            "Fuga"
+            "*"
         ],
-        "filename":  "CF_EE_D0_R0.pkl"
+        "filename":  ""
         },
     "INPUTS_VARIABLES": [
         [
@@ -31,6 +32,8 @@
         ]
     ],
     "SAMPLE_TIME": 0.5,
+    "TIME_WINDOW": 120,
+    "TIME_WINDOW_FRACTION": 1.2,
     "FEATURE_EXTRACTION_CONFIGS": {
         "stats": false,
         "stats_features": [
@@ -66,5 +69,6 @@
                 "KG/S"
             ]
         ]
-    }
+    },
+    "LEAK_RATIO": 0.01
 }
