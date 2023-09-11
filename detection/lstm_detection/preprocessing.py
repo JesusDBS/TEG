@@ -102,10 +102,24 @@ class DetectionPreprocessPipeline:
             
         return features_per_variable
     
+    def __get_no_leak_end_point(self, file: dict) -> int:
+        end_time = file['genkey']['Global keywords']['INTEGRATION']['ENDTIME']
+
+        if end_time['UNIT'].lower()=='m':
+            _end_point = int(end_time['VALUE'] * 60 / self.configs['SAMPLE_TIME']) #Seg.
+
+        elif end_time['UNIT'].lower()=='s':
+            _end_point = int(end_time['VALUE'] / self.configs['SAMPLE_TIME'])
+        
+        return _end_point
+    
     def __process_no_leak_data(self, file: dict):
         """Extract data's windows and its features for no leak data.
         """
-        pass
+        print("NO LEAK")
+        end_point = self.__get_no_leak_end_point(file)
+        df = file['tpl']
+        breakpoint()
     
     @staticmethod
     def __calculate_leak_flow_values_ratio(leak_flow_values_window: pd.Series) -> int:
@@ -161,7 +175,7 @@ class DetectionPreprocessPipeline:
         """
         self.output_label = list()
         self.input_features = list()
-        for num_case, file in enumerate(self.data[0:10]):
+        for num_case, file in enumerate(self.data):
             print(f"......Processing {num_case + 1} of {len(self.data)}.......")
 
             components = file['genkey']['Network Component'][1::]
@@ -170,7 +184,7 @@ class DetectionPreprocessPipeline:
 
             else:
                 self.__process_no_leak_data(file)
-
+        breakpoint()
         self.__reshape_features()
     
     def run(self):
