@@ -7,7 +7,7 @@
             "data",
             "No Fuga"
         ],
-        "filename":  "SF_ET_D0_R0.pkl"
+        "filename":  "CV_ET_D0_R0.pkl"
         },
     "INPUTS_VARIABLES": [
         [
@@ -70,5 +70,6 @@
             ]
         ]
     },
-    "LEAK_RATIO": 0.01
+    "LEAK_RATIO": 0.01,
+    "TIMESTEPS": 10
 }

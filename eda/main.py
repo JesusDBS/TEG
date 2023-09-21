@@ -32,17 +32,21 @@ def main(
 if __name__ == "__main__":
 
     EE_leak_data_path = os.path.join(
-        "..", "data", "data", "Fuga", "CF_EE_D0_R0.pkl"
+        "..", "data", "data", "No Fuga", "CV_ET_D0_R0.pkl"
     )
 
     variables_to_plot = [
         ('PT_POSITION_POS1378M', 'Pressure', 'PA'),
         ('GT_POSITION_POS1378M', 'Total_mass_flow', 'KG/S'),
         # ('GTLEAK_LEAK_LEAK', 'Leakage_total_mass_flow_rate', 'KG/S'),
+        # ('CONTR_CONTROLLER_CONTROLLEAK', 'Controller_output', '')
+        # ('STROKE', 'Stroke', 'S')
+        # ('VALVOP_CHOKE_VOUT', 'Relative_valve_opening', '')
+        ('VALVE_OPENING', 'Valve opening', 'CM')
     ]
 
-    CASES_FROM = 20
-    CASES_TO = 22
+    CASES_FROM = 1
+    CASES_TO = 2
 
     SLICE_START = 10
     SLICE_END = 150

@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 from typing import Any
 from rackio_AI import RackioAI
+from tqdm import tqdm
 
 # This code line is to avoid import relative error
 sys.path.append("..")
@@ -67,7 +68,7 @@ class DetectionPreprocessPipeline:
         return False
     
     @staticmethod
-    def __get_leak_info(components:list):
+    def __get_leak_info(components: list) -> tuple:
         """
         Gets the leak info from genkey's Network Components key.
         """
@@ -113,13 +114,25 @@ class DetectionPreprocessPipeline:
         
         return _end_point
     
+    @staticmethod
+    def __get_components(file: dict) -> list:
+        return file['genkey']['Network Component'][1::]
+    
     def __process_no_leak_data(self, file: dict):
         """Extract data's windows and its features for no leak data.
         """
-        print("NO LEAK")
         end_point = self.__get_no_leak_end_point(file)
-        df = file['tpl']
-        breakpoint()
+        start_point = 0
+        df = file['tpl'][start_point:end_point]
+
+        for point, _ in enumerate(df):
+            if point + self.configs['TIME_WINDOW'] <= end_point:
+                window = df[point:point + self.configs['TIME_WINDOW']]
+                self.input_features.append(
+                    np.concatenate(
+                        self.__extract_features(window), axis=1)
+                )
+                self.output_label.append(False)
     
     @staticmethod
     def __calculate_leak_flow_values_ratio(leak_flow_values_window: pd.Series) -> int:
@@ -132,7 +145,7 @@ class DetectionPreprocessPipeline:
     def __process_leak_data(self, file: dict):
         """Extracts and labels data's windows and its features for leak data. 
         """
-        leak_components = file['genkey']['Network Component'][1::]
+        leak_components = self.__get_components(file)
         leak_values, _ , leak_pos = self.__get_leak_info(components=leak_components)
         leak_point = leak_values[leak_pos[0]] * \
             60 / self.configs['SAMPLE_TIME']
@@ -175,21 +188,42 @@ class DetectionPreprocessPipeline:
         """
         self.output_label = list()
         self.input_features = list()
-        for num_case, file in enumerate(self.data):
-            print(f"......Processing {num_case + 1} of {len(self.data)}.......")
 
+        for file in tqdm(self.data):
             components = file['genkey']['Network Component'][1::]
             if self.__check_if_leak(components):
                 self.__process_leak_data(file)
 
             else:
                 self.__process_no_leak_data(file)
-        breakpoint()
+        
         self.__reshape_features()
+
+    @report_done
+    def lstm_data_transform(self):
+        """ Changes data to the format for LSTM training
+        """
+        X, y = list(), list()
+        
+        for i in tqdm(range(self.input_features.shape[0])):
+            end_ix = i + self.configs['TIMESTEPS']
+            if end_ix >= self.input_features.shape[0]:
+                break
+            
+            seq_X = self.input_features[i:end_ix]
+            seq_y = self.output_label[end_ix]
+            X.append(seq_X)
+            y.append(seq_y)
+
+        x_array = np.array(X)
+        y_array = np.array(y)
+        breakpoint()
+        self.data = (x_array, y_array)
     
     def run(self):
         self.load_data()
         self.process_data()
+        self.lstm_data_transform()
         
     def __call__(self) -> Any:
         self.run()
