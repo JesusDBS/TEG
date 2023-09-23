@@ -2,6 +2,7 @@ import os
 import sys
 import glob
 import ast
+import pickle
 import pandas as pd
 import numpy as np
 from typing import Any
@@ -181,6 +182,15 @@ class DetectionPreprocessPipeline:
     def __reshape_features(self):
         self.output_label = np.array(self.output_label).reshape(len(self.output_label), 1)
         self.input_features = np.concatenate(self.input_features, axis=0)
+
+    def __shuffle_features(self):
+        features = np.concatenate([self.input_features, self.output_label], axis=1)
+        # Shuffling
+        np.random.shuffle(features)
+        self.output_label = features[:,-1]
+        self.output_label = self.output_label.reshape(len(self.output_label), 1)
+        self.input_features = features[:,0:-1]
+        del features
     
     @report_done
     def process_data(self):
@@ -198,6 +208,7 @@ class DetectionPreprocessPipeline:
                 self.__process_no_leak_data(file)
         
         self.__reshape_features()
+        self.__shuffle_features()
 
     @report_done
     def lstm_data_transform(self):
@@ -205,7 +216,7 @@ class DetectionPreprocessPipeline:
         """
         X, y = list(), list()
         
-        for i in tqdm(range(self.input_features.shape[0])):
+        for i in range(self.input_features.shape[0]):
             end_ix = i + self.configs['TIMESTEPS']
             if end_ix >= self.input_features.shape[0]:
                 break
@@ -217,13 +228,28 @@ class DetectionPreprocessPipeline:
 
         x_array = np.array(X)
         y_array = np.array(y)
-        breakpoint()
-        self.data = (x_array, y_array)
     
+        self.data = (x_array, y_array)
+
+    @report_done
+    def save_data(self):
+        self.configs['SAVE_DATA_PATH']['path'].append(
+            self.configs['SAVE_DATA_PATH']['filename']
+        )
+        filename = os.sep.join(
+            self.configs['SAVE_DATA_PATH']['path']
+            )
+        
+        with open(filename, "wb") as file:
+            pickle.dump(self.data, file)
+
+        del self.data
+
     def run(self):
         self.load_data()
         self.process_data()
         self.lstm_data_transform()
+        self.save_data()
         
     def __call__(self) -> Any:
         self.run()

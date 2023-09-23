@@ -9,6 +9,15 @@
         ],
         "filename":  "CV_ET_D0_R0.pkl"
         },
+    "SAVE_DATA_PATH":{
+        "path": [
+            "..",
+            "data",
+            "processed_data",
+            "detection"
+        ],
+        "filename":  "Test_1.pkl"
+    },
     "INPUTS_VARIABLES": [
         [
             "PT_POSITION_POS58M",
