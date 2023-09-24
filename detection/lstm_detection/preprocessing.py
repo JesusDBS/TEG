@@ -211,44 +211,22 @@ class DetectionPreprocessPipeline:
         self.__shuffle_features()
 
     @report_done
-    def lstm_data_transform(self):
-        """ Changes data to the format for LSTM training
-        """
-        X, y = list(), list()
-        
-        for i in range(self.input_features.shape[0]):
-            end_ix = i + self.configs['TIMESTEPS']
-            if end_ix >= self.input_features.shape[0]:
-                break
-            
-            seq_X = self.input_features[i:end_ix]
-            seq_y = self.output_label[end_ix]
-            X.append(seq_X)
-            y.append(seq_y)
-
-        x_array = np.array(X)
-        y_array = np.array(y)
-    
-        self.data = (x_array, y_array)
-
-    @report_done
     def save_data(self):
-        self.configs['SAVE_DATA_PATH']['path'].append(
-            self.configs['SAVE_DATA_PATH']['filename']
-        )
-        filename = os.sep.join(
-            self.configs['SAVE_DATA_PATH']['path']
-            )
-        
-        with open(filename, "wb") as file:
-            pickle.dump(self.data, file)
+        path = self.configs['SAVE_DATA_PATH']['path']
+        filename = self.configs['SAVE_DATA_PATH']['filename']
+        path.append(filename)
 
-        del self.data
+        filename = os.sep.join(path)
+
+        with open(filename, "wb") as file:
+            pickle.dump((
+                self.input_features,
+                self.output_label
+            ), file)
 
     def run(self):
         self.load_data()
         self.process_data()
-        self.lstm_data_transform()
         self.save_data()
         
     def __call__(self) -> Any:

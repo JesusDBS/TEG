@@ -5,9 +5,9 @@
             "..",
             "data",
             "data",
-            "No Fuga"
+            "Fuga"
         ],
-        "filename":  "CV_ET_D0_R0.pkl"
+        "filename":  "CF_ET_D0_R0.pkl"
         },
     "SAVE_DATA_PATH":{
         "path": [
@@ -16,7 +16,7 @@
             "processed_data",
             "detection"
         ],
-        "filename":  "Test_1.pkl"
+        "filename":  "Test_2.pkl"
     },
     "INPUTS_VARIABLES": [
         [
@@ -80,5 +80,10 @@
         ]
     },
     "LEAK_RATIO": 0.01,
-    "TIMESTEPS": 10
+    "TIMESTEPS": 10,
+    "SCALER":{
+        "input":{
+            "feature_range": [-1, 1]
+        }
+    }
 }

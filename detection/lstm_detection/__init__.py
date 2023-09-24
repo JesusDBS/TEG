@@ -1,1 +1,2 @@
 from .preprocessing import DetectionPreprocessPipeline
+from .model import DetectionTrainingModelPipeline
