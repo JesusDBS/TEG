@@ -5,9 +5,9 @@
             "..",
             "data",
             "data",
-            "Fuga"
+            "No Fuga"
         ],
-        "filename":  "CF_ET_D0_R0.pkl"
+        "filename":  "CV_ET_D0_R0.pkl"
         },
     "SAVE_DATA_PATH":{
         "path": [
@@ -16,7 +16,7 @@
             "processed_data",
             "detection"
         ],
-        "filename":  "Test_2.pkl"
+        "filename":  "Test_1.pkl"
     },
     "INPUTS_VARIABLES": [
         [

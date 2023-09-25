@@ -202,6 +202,7 @@ class DetectionPreprocessPipeline:
         for file in tqdm(self.data):
             components = file['genkey']['Network Component'][1::]
             if self.__check_if_leak(components):
+                #Looking for broken simulations
                 if len(file['tpl']) < 360:
                     continue
     

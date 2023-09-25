@@ -19,7 +19,7 @@ class DetectionTrainingModelPipeline:
         self.configs = parse_config(configs)
 
     def __get_filename_path(self) -> str:
-        path = self.configs['SAVE_DATA_PATH']['path']
+        path = self.configs['SAVE_DATA_PATH']['path'].copy()
         filename = self.configs['SAVE_DATA_PATH']['filename']
         path.append(filename)
 
@@ -59,13 +59,14 @@ class DetectionTrainingModelPipeline:
     def scale_input_data(self):
         """Scales input data for training
         """
-        breakpoint()
         scaler = MinMaxScaler(feature_range=tuple(self.configs['SCALER']['input']['feature_range']))
         scaler = scaler.fit(self.input_features)
         filename = self.__get_filename_path()
-        
-        # joblib.dump(scaler, )
+        filename = filename.replace('.pkl', '.inputScaler.gz')
         breakpoint()
+        joblib.dump(scaler, filename)
+        self.input_features = scaler.transform(self.input_features)
+        
 
     def run(self):
         self.load_dataset()
