@@ -50,10 +50,8 @@ class DetectionTrainingModelPipeline:
             X.append(seq_X)
             y.append(seq_y)
 
-        x_array = np.array(X)
-        y_array = np.array(y)
-    
-        self.data = (x_array, y_array)
+        self.input_features = np.array(X)
+        self.output_label = np.array(y)
 
     @report_done
     def scale_input_data(self):
@@ -63,14 +61,14 @@ class DetectionTrainingModelPipeline:
         scaler = scaler.fit(self.input_features)
         filename = self.__get_filename_path()
         filename = filename.replace('.pkl', '.inputScaler.gz')
-        breakpoint()
+        
         joblib.dump(scaler, filename)
         self.input_features = scaler.transform(self.input_features)
         
-
     def run(self):
         self.load_dataset()
         self.scale_input_data()
+        self.lstm_data_transform()
 
     def __call__(self) -> Any:
         self.run()

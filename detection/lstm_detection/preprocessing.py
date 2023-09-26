@@ -98,11 +98,19 @@ class DetectionPreprocessPipeline:
             convert_list2tuple, self.configs['INPUTS_VARIABLES']
             ))
         for input_variable in variables:
+            input_variable = self.__add_white_noise(
+                np.array(window[input_variable])
+            )
             features_per_variable.append(
-                self.feature_extraction(np.array(window[input_variable]))
+                self.feature_extraction(input_variable)
                 )
             
         return features_per_variable
+    
+    @staticmethod
+    def __add_white_noise(data: np.array, mean: float = 0, std: float = 0.001) -> np.array:
+        noise = np.random.normal(mean, std, data.shape)
+        return data + noise
     
     def __get_no_leak_end_point(self, file: dict) -> int:
         end_time = file['genkey']['Global keywords']['INTEGRATION']['ENDTIME']
@@ -205,9 +213,9 @@ class DetectionPreprocessPipeline:
                 #Looking for broken simulations
                 if len(file['tpl']) < 360:
                     continue
-    
+                
                 self.__process_leak_data(file)
-
+                
             else:
                 self.__process_no_leak_data(file)
         

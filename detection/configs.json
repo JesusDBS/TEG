@@ -16,7 +16,7 @@
             "processed_data",
             "detection"
         ],
-        "filename":  "Test_1.pkl"
+        "filename":  "Test_5.pkl"
     },
     "INPUTS_VARIABLES": [
         [
@@ -54,7 +54,7 @@
         "wave": true,
         "wave_stats": true,
         "wavelet_type": "db2",
-        "wavelet_lvl": 3,
+        "wavelet_lvl":3,
         "time_window": 120,
         "variables_names": [
             [
