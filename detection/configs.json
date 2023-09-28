@@ -18,6 +18,14 @@
         ],
         "filename":  "Test_5.pkl"
     },
+    "SAVE_MODEL_PATH": {
+        "path": [
+            "..",
+            "models",
+            "detection"
+        ],
+        "filename": "experiment_1.h5"
+    },
     "INPUTS_VARIABLES": [
         [
             "PT_POSITION_POS58M",
@@ -84,6 +92,34 @@
     "SCALER":{
         "input":{
             "feature_range": [-1, 1]
+        }
+    },
+    "TRAINING": {
+        "dataset": {
+            "shuffle": false,
+            "test_size": 0.3
+        },
+        "model": {
+            "units":[32, 64, 1],
+            "activations": ["tanh", "tanh", "sigmoid"]
+        },
+        "callbacks": {
+            "monitor": "val_loss",
+            "min_delta": 0.00001,
+            "verbose": false,
+            "patience": 15
+        },
+        "optimizer": {
+            "name": "Adam",
+            "learning_rate": 0.001,
+            "amsgrad": true
+        },
+        "compile": {
+            "loss": "binary_crossentropy",
+            "metrics" : "binary_accuracy"
+        },
+        "fit": {
+            "epochs" : 10   
         }
     }
 }
