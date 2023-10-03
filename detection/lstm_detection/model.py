@@ -2,8 +2,8 @@ import os
 import sys
 import pickle
 import joblib
-import ast
 import numpy as np
+import matplotlib.pyplot as plt
 import tensorflow as tf
 from typing import Any
 from sklearn.preprocessing import MinMaxScaler
@@ -128,14 +128,13 @@ class DetectionTrainingModelPipeline:
         )
 
     def __train(self, callbacks, x_train, y_train, x_test, y_test, epochs:int=10):
-        history = self.model.fit(
+        self.history = self.model.fit(
             x_train,
             y_train,
             epochs=epochs,
             validation_data=(x_test, y_test),
             callbacks=[callbacks]
         )
-        return history
 
     @report_done
     def train_model(self):
@@ -155,7 +154,7 @@ class DetectionTrainingModelPipeline:
             optimizer=optimizer,
             **self.configs['TRAINING']['compile']
         )
-        history = self.__train(
+        self.__train(
             callbacks = callbacks,
             x_train = self.X_train,
             y_train = self.y_train,
@@ -163,11 +162,11 @@ class DetectionTrainingModelPipeline:
             y_test = self.y_test,
             epochs=self.configs['TRAINING']['fit']['epochs']
         )
+
         filename = self.__get_filename_path(
             key='SAVE_MODEL_PATH'
         )
         self.__save_model(filename)
-        return history
     
     def __save_model(self, filename: str):
         self.model.save(filename)
@@ -181,4 +180,5 @@ class DetectionTrainingModelPipeline:
 
     def __call__(self) -> Any:
         self.run()
+        return self.history
 

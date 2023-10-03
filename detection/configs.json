@@ -5,9 +5,9 @@
             "..",
             "data",
             "data",
-            "No Fuga"
+            "*"
         ],
-        "filename":  "CV_ET_D0_R0.pkl"
+        "filename":  ""
         },
     "SAVE_DATA_PATH":{
         "path": [
@@ -16,7 +16,7 @@
             "processed_data",
             "detection"
         ],
-        "filename":  "Test_5.pkl"
+        "filename":  "dataset.pkl"
     },
     "SAVE_MODEL_PATH": {
         "path": [
@@ -106,20 +106,20 @@
         "callbacks": {
             "monitor": "val_loss",
             "min_delta": 0.00001,
-            "verbose": false,
+            "verbose": true,
             "patience": 15
         },
         "optimizer": {
             "name": "Adam",
-            "learning_rate": 0.001,
+            "learning_rate": 0.0001,
             "amsgrad": true
         },
         "compile": {
             "loss": "binary_crossentropy",
-            "metrics" : "binary_accuracy"
+            "metrics" : "binary_crossentropy"
         },
         "fit": {
-            "epochs" : 10   
+            "epochs" : 2
         }
     }
 }
