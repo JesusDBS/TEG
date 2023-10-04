@@ -5,7 +5,7 @@ import joblib
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from typing import Any
+from typing import Any, List
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
@@ -89,7 +89,7 @@ class DetectionTrainingModelPipeline:
 
         for layer in range(len(units)):
 
-            if layer == len(units):
+            if layer == len(units) - 1:
                 return_sequences = False
 
             self.model.add(
@@ -107,7 +107,7 @@ class DetectionTrainingModelPipeline:
                 activation = output_activation,
             )
         )
-
+        
     @staticmethod
     def __define_callbacks(**kwargs):
         return tf.keras.callbacks.EarlyStopping(
@@ -162,7 +162,6 @@ class DetectionTrainingModelPipeline:
             y_test = self.y_test,
             epochs=self.configs['TRAINING']['fit']['epochs']
         )
-
         filename = self.__get_filename_path(
             key='SAVE_MODEL_PATH'
         )
@@ -181,4 +180,42 @@ class DetectionTrainingModelPipeline:
     def __call__(self) -> Any:
         self.run()
         return self.history
+    
+def plot_learning_curve(dict_val: dict,
+                        values: List[str],
+                        x_label: str,
+                        y_label: str,
+                        legend_list: List[str],
+                        title: str,
+                        legend_loc: str = 'upper left'
+                        ) -> Any:
+    """Plots the learning curves of the model.
+    """
+    for val in dict_val:
+        if val in values:
+            plt.plot(dict_val[val])
+
+    plt.title(title)
+    plt.ylabel(x_label)
+    plt.xlabel(y_label)
+    plt.legend(legend_list, loc=legend_loc)
+    plt.show()
+
+def plot_confusion_matrix(model,
+                          x_train: np.array,
+                          x_test: np.array,
+                          y_train: np.array,
+                          y_test: np.array,
+                          label_list: List[str]) -> Any:
+    """Plots confusion matrix.
+    """
+    X_test = np.concatenate([x_train, x_test], axis=0)
+    y_prediction = model.predict(X_test)
+    y_prediction = np.rint(y_prediction).astype(int)
+    y_test = np.concatenate([y_train, y_test], axis=0)
+
+    cm = confusion_matrix(y_test, y_prediction)
+    cmd = ConfusionMatrixDisplay(cm, display_labels=label_list)
+    cmd.plot()
+    plt.show()
 

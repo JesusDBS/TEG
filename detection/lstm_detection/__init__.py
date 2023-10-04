@@ -1,2 +1,2 @@
 from .preprocessing import DetectionPreprocessPipeline
-from .model import DetectionTrainingModelPipeline
+from .model import DetectionTrainingModelPipeline, plot_learning_curve, plot_confusion_matrix
