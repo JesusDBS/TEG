@@ -1,5 +1,4 @@
 {
-    "DEBUG": true,
     "DATA_PATH": {
         "path": [
             "..",
@@ -100,7 +99,7 @@
             "test_size": 0.2
         },
         "model": {
-            "units":[16, 32, 1],
+            "units":[32, 64, 1],
             "activations": ["tanh", "tanh", "sigmoid"]
         },
         "callbacks": {

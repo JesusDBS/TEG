@@ -3,6 +3,7 @@ import sys
 import glob
 import ast
 import pickle
+import random
 import pandas as pd
 import numpy as np
 from typing import Any
@@ -41,9 +42,10 @@ class DetectionPreprocessPipeline:
             files = glob.glob(path)
 
         for file in files:
-
+            print(file)
             self.data.extend(RackioAI.load(file))
-        
+            
+        random.shuffle(self.data)
         return self.data
     
     @staticmethod
@@ -220,7 +222,7 @@ class DetectionPreprocessPipeline:
                 self.__process_no_leak_data(file)
         
         self.__reshape_features()
-        self.__shuffle_features()
+        # self.__shuffle_features()
 
     @report_done
     def save_data(self):
