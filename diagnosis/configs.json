@@ -1,0 +1,143 @@
+{
+    "DATA_PATH": {
+        "path": [
+            "..",
+            "data",
+            "data",
+            "Fuga"
+        ],
+        "filename":  ""
+        },
+    "SAVE_DATA_PATH":{
+        "path": [
+            "..",
+            "data",
+            "processed_data",
+            "diagnosis",
+            "leak_flow"
+        ],
+        "filename":  "dataset.pkl"
+    },
+    "SAVE_MODEL_PATH": {
+        "path": [
+            "..",
+            "models",
+            "detection"
+        ],
+        "filename": "experiment_1.h5"
+    },
+    "INPUTS_VARIABLES": [
+        [
+            "PT_POSITION_POS58M",
+            "Pressure",
+            "PA"
+        ],
+        [
+            "GT_POSITION_POS58M",
+            "Total_mass_flow",
+            "KG/S"
+        ],
+        [
+            "PT_POSITION_POS1378M",
+            "Pressure",
+            "PA"
+        ],
+        [
+            "GT_POSITION_POS1378M",
+            "Total_mass_flow",
+            "KG/S"
+        ]
+    ],
+    "OUTPUT_VARIABLES": {
+        "leak_flow": [
+            "GTLEAK_LEAK_LEAK",
+            "Leakage_total_mass_flow_rate", 
+            "KG/S"
+        ],
+        "leak_location": [
+            "LEAK_LOCATION", 
+            "Leak location", 
+            "M"
+        ],
+        "leak_size": [
+            "LEAK_SIZE", 
+            "Leak size", 
+            "IN"
+        ]
+    },
+    "OUTPUT_TO_USE": "leak_flow",
+    "SAMPLE_TIME": 0.5,
+    "TIME_WINDOW": 120,
+    "TIME_WINDOW_FRACTION": 1.2,
+    "FEATURE_EXTRACTION_CONFIGS": {
+        "stats": false,
+        "stats_features": [
+            "kurt",
+            "skew",
+            "crest_factor",
+            "peak2valley"
+        ],
+        "wave": true,
+        "wave_stats": true,
+        "wavelet_type": "db2",
+        "wavelet_lvl":3,
+        "time_window": 120,
+        "variables_names": [
+            [
+                "PT_POSITION_POS58M",
+                "Pressure",
+                "PA"
+            ],
+            [
+                "GT_POSITION_POS58M",
+                "Total_mass_flow",
+                "KG/S"
+            ],
+            [
+                "PT_POSITION_POS1378M",
+                "Pressure",
+                "PA"
+            ],
+            [
+                "GT_POSITION_POS1378M",
+                "Total_mass_flow",
+                "KG/S"
+            ]
+        ]
+    },
+    "LEAK_RATIO": 0.01,
+    "TIMESTEPS": 10,
+    "SCALER":{
+        "input":{
+            "feature_range": [-1, 1]
+        }
+    },
+    "TRAINING": {
+        "dataset": {
+            "shuffle": false,
+            "test_size": 0.2
+        },
+        "model": {
+            "units":[32, 64, 1],
+            "activations": ["tanh", "tanh", "sigmoid"]
+        },
+        "callbacks": {
+            "monitor": "val_loss",
+            "min_delta": 0.00001,
+            "verbose": true,
+            "patience": 15
+        },
+        "optimizer": {
+            "name": "Adam",
+            "learning_rate": 0.0001,
+            "amsgrad": true
+        },
+        "compile": {
+            "loss": "binary_crossentropy",
+            "metrics" : "binary_crossentropy"
+        },
+        "fit": {
+            "epochs" : 100
+        }
+    }
+}
