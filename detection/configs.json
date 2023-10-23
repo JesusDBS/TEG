@@ -23,7 +23,7 @@
             "models",
             "detection"
         ],
-        "filename": "experiment_1.h5"
+        "filename": "detection_model.h5"
     },
     "INPUTS_VARIABLES": [
         [

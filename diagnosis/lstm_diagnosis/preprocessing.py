@@ -86,12 +86,12 @@ class DiagnosisRegressionPreprocessingPipeline:
         """
         time_window = self.configs['TIME_WINDOW']
         end_point = self.__get_end_point(file)
-        start_point = 0
+        start_point = 20
         df = file['tpl'].iloc[start_point:end_point]
         variable_to_predict = self.configs['OUTPUT_TO_USE']
        
         for point in range(0, df.shape[0] + 1):
-            if point + time_window <= end_point:
+            if point + time_window <= end_point - start_point:
                 window = df.iloc[point:point + time_window]
     
                 self.input_features.append(
