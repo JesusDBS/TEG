@@ -46,7 +46,7 @@ class DetectionPreprocessPipeline:
             print(file)
             self.data.extend(RackioAI.load(file))
             
-        # random.shuffle(self.data)
+        random.shuffle(self.data)
         return self.data
     
     @staticmethod
