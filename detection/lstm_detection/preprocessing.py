@@ -9,6 +9,7 @@ import numpy as np
 from typing import Any
 from rackio_AI import RackioAI
 from tqdm import tqdm
+import matplotlib.pyplot as plt
 
 # This code line is to avoid import relative error
 sys.path.append("..")
@@ -45,7 +46,7 @@ class DetectionPreprocessPipeline:
             print(file)
             self.data.extend(RackioAI.load(file))
             
-        random.shuffle(self.data)
+        # random.shuffle(self.data)
         return self.data
     
     @staticmethod
@@ -133,12 +134,13 @@ class DetectionPreprocessPipeline:
         """Extract data's windows and its features for no leak data.
         """
         end_point = self.__get_no_leak_end_point(file)
-        start_point = 0
-        df = file['tpl'][start_point:end_point]
+        start_point = 20
+        df = file['tpl'].iloc[start_point:end_point]
 
-        for point, _ in enumerate(df):
-            if point + self.configs['TIME_WINDOW'] <= end_point:
-                window = df[point:point + self.configs['TIME_WINDOW']]
+        for point in range(0, df.shape[0] + 1):
+            if point + self.configs['TIME_WINDOW'] <= end_point - start_point:
+                window = df.iloc[point:point + self.configs['TIME_WINDOW']]
+                
                 self.input_features.append(
                     np.concatenate(
                         self.__extract_features(window), axis=1)
@@ -164,14 +166,16 @@ class DetectionPreprocessPipeline:
                           self.configs['TIME_WINDOW']/self.configs['TIME_WINDOW_FRACTION'])
         end_point = int(leak_point + 60)
 
-        df = file['tpl'][start_point:end_point]
+        df = file['tpl'].iloc[start_point:end_point]
 
-        for point, _ in enumerate(df):
-            if point + self.configs['TIME_WINDOW'] <= end_point:
-                window = df[point:point + self.configs['TIME_WINDOW']]
+        for point in range(0, df.shape[0] + 1):
+            if point + self.configs['TIME_WINDOW'] <= end_point - start_point:
+                window = df.iloc[point:point + self.configs['TIME_WINDOW']]
+
                 leak_flow_values_window = window[
                     ('GTLEAK_LEAK_LEAK', 'Leakage_total_mass_flow_rate', 'KG/S')
                     ]
+                
                 leak_flow_values_ratio = self.__calculate_leak_flow_values_ratio(
                     leak_flow_values_window
                 )
