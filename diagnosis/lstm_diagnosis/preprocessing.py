@@ -81,34 +81,65 @@ class DiagnosisRegressionPreprocessingPipeline:
         
         return _end_point
     
+    @staticmethod
+    def __get_leak_info(components: list) -> tuple:
+        """
+        Gets the leak info from genkey's Network Components key.
+        """
+        for component in components:
+
+            parameters = component['PARAMETERS']
+            if 'leak' in parameters['LABEL'].lower():
+
+                break
+
+        setpoints = parameters['SETPOINT']
+        if isinstance(setpoints, str):
+
+            setpoints = list(ast.literal_eval(setpoints))
+
+        values = list(parameters['TIME']['VALUES'])
+        pos = [x for x in range(len(setpoints)) if setpoints[x]==1]
+
+        return (values, setpoints, pos)
+    
+    @staticmethod
+    def __get_components(file: dict) -> list:
+        return file['genkey']['Network Component'][1::]
+    
     def _label_data(self, file: dict):
         """Extracts and labels data's windows and its features for leak data.
         """
         time_window = self.configs['TIME_WINDOW']
-        end_point = self.__get_end_point(file)
-        start_point = 20
+        leak_components = self.__get_components(file)
+        leak_values, _ , leak_pos = self.__get_leak_info(components=leak_components)
+        leak_point = leak_values[leak_pos[0]] * \
+            60 / self.configs['SAMPLE_TIME']
+        start_point = int(leak_point - \
+                          time_window/self.configs['TIME_WINDOW_FRACTION'])
+        end_point = int(leak_point + 60)
+
         df = file['tpl'].iloc[start_point:end_point]
         variable_to_predict = self.configs['OUTPUT_TO_USE']
-       
+
         for point in range(0, df.shape[0] + 1):
             if point + time_window <= end_point - start_point:
                 window = df.iloc[point:point + time_window]
-    
+
                 self.input_features.append(
                     np.concatenate(
                         self.__extract_features(window), axis=1)
                 )
-                output_label = window[
-                    convert_list2tuple(
-                        self.configs['OUTPUT_VARIABLES'][variable_to_predict]
-                        )
-                    ]
-                del window
 
                 #Set output label as the last value of the window
                 self.output_label.append(
-                    output_label.iat[-1]
+                    window[
+                        convert_list2tuple(
+                            self.configs['OUTPUT_VARIABLES'][variable_to_predict]
+                            )
+                    ].iat[-1]
                 )
+                del window
     
     def _reshape_features(self):
         self.output_label = np.array(self.output_label).reshape(len(self.output_label), 1)

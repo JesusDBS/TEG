@@ -9,7 +9,6 @@ import numpy as np
 from typing import Any
 from rackio_AI import RackioAI
 from tqdm import tqdm
-import matplotlib.pyplot as plt
 
 # This code line is to avoid import relative error
 sys.path.append("..")
