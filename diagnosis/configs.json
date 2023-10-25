@@ -22,9 +22,10 @@
         "path": [
             "..",
             "models",
-            "detection"
+            "diagnosis",
+            "leak_flow"
         ],
-        "filename": "experiment_1.h5"
+        "filename": "leak_flow_exp_1.h5"
     },
     "INPUTS_VARIABLES": [
         [
@@ -110,6 +111,9 @@
     "SCALER":{
         "input":{
             "feature_range": [-1, 1]
+        },
+        "output": {
+            "output_range": [-1, 1]
         }
     },
     "TRAINING": {
@@ -118,14 +122,14 @@
             "test_size": 0.2
         },
         "model": {
-            "units":[32, 64, 1],
-            "activations": ["tanh", "tanh", "sigmoid"]
+            "units":[12, 24, 1],
+            "activations": ["tanh", "tanh", "tanh"]
         },
         "callbacks": {
             "monitor": "val_loss",
-            "min_delta": 0.00001,
+            "min_delta": 0.0001,
             "verbose": true,
-            "patience": 15
+            "patience": 10
         },
         "optimizer": {
             "name": "Adam",
@@ -133,11 +137,43 @@
             "amsgrad": true
         },
         "compile": {
-            "loss": "binary_crossentropy",
-            "metrics" : "binary_crossentropy"
+            "loss": "mse",
+            "metrics" : "msle"
         },
         "fit": {
             "epochs" : 100
+        }
+    },
+    "TESTING": {
+        "test_data": {
+            "path": [
+                "..",
+                "data",
+                "data",
+                "Fuga"
+            ],
+            "filename":  ""
+        },
+        "scalers": {
+            "path": [
+                "..",
+                "data",
+                "processed_data",
+                "diagnosis",
+                "leak_flow"
+            ],
+            "filename":  "dataset"
+        },
+        "cases": {
+            "from": 0,
+            "to": 10
+        },
+        "plot": {
+            "title": "Flujo de Fuga",
+            "y_label": "Flujo de Fuga simulado",
+            "y_pred_label": "Flujo de Fuga predicho",
+            "xlabel": "Tiempo (ms)",
+            "ylabel": "Flujo de Fuga (Kg/s)"
         }
     }
 }

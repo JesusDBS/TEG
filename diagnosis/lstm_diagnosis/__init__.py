@@ -1,2 +1,2 @@
 from .preprocessing import DiagnosisRegressionPreprocessingPipeline
-from . model import DiagnosisTrainingModelPipeline
+from . model import DiagnosisTrainingModelPipeline, DiagnosisTestingRegressionModel, plot_learning_curve
