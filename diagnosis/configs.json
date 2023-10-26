@@ -14,7 +14,7 @@
             "data",
             "processed_data",
             "diagnosis",
-            "leak_flow"
+            "leak_size"
         ],
         "filename":  "dataset.pkl"
     },
@@ -23,9 +23,9 @@
             "..",
             "models",
             "diagnosis",
-            "leak_flow"
+            "leak_size"
         ],
-        "filename": "leak_flow_exp_1.h5"
+        "filename": "leak_size_exp_1.h5"
     },
     "INPUTS_VARIABLES": [
         [
@@ -66,7 +66,7 @@
             "IN"
         ]
     },
-    "OUTPUT_TO_USE": "leak_flow",
+    "OUTPUT_TO_USE": "leak_size",
     "SAMPLE_TIME": 0.5,
     "TIME_WINDOW": 120,
     "TIME_WINDOW_FRACTION": 1.2,
@@ -160,7 +160,7 @@
                 "data",
                 "processed_data",
                 "diagnosis",
-                "leak_flow"
+                "leak_size"
             ],
             "filename":  "dataset"
         },
@@ -169,11 +169,11 @@
             "to": 10
         },
         "plot": {
-            "title": "Flujo de Fuga",
-            "y_label": "Flujo de Fuga simulado",
-            "y_pred_label": "Flujo de Fuga predicho",
+            "title": "Diametro de Fuga",
+            "y_label": "Diametro de Fuga simulado",
+            "y_pred_label": "Diametro de Fuga predicho",
             "xlabel": "Tiempo (ms)",
-            "ylabel": "Flujo de Fuga (Kg/s)"
+            "ylabel": "Diametro de Fuga (in)"
         }
     }
 }

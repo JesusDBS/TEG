@@ -47,8 +47,8 @@ if __name__ == "__main__":
         # ('VALVE_OPENING', 'Valve opening', 'CM')
     ]
 
-    CASES_FROM = 1
-    CASES_TO = 2
+    CASES_FROM = 0
+    CASES_TO = 10
 
     SLICE_START = 10
     SLICE_END = 150
